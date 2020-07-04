@@ -1,5 +1,4 @@
-name: Django CI
-
+name: Continuous Integration and Delivery
 on:
   push:
     branches: [ master ]
@@ -7,24 +6,16 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
 
+  build:
+    name: Build Docker Images
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 2
-      matrix:
-        python-version: [3.7]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
+    - name: Build the Docker image Django
+      run: docker build -t hobbify_production_django -f ./compose/production/django/Dockerfile .
+
+    - name: Build images
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements/production.txt
-    - name: Run Tests
-      run: |
-        echo "Test pending"
+          docker-compose -f production.yml build

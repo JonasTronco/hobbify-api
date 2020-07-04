@@ -18,4 +18,4 @@ jobs:
 
     - name: Build images
       run: |
-          docker-compose -f production.yml build
+          docker-compose -f local.yml build
